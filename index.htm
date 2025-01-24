@@ -59,7 +59,7 @@
 
             if (initialExercise) {
                 exerciseDisplay.textContent = decodeURIComponent(initialExercise);
-                exerciseImage.src = `images/${decodeURIComponent(initialExercise).replace(/ /g, '_')}.jpg`;
+                exerciseImage.src = `images/${decodeURIComponent(initialExercise)}.webp`;
             } else {
                 generateExercise();
             }
