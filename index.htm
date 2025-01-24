@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crossfit Exercise Generator</title>
+    <script>
+        // Pre-generated funny Crossfit exercise names
+        const exerciseNames = [
+            "Burpee Twister Explosion",
+            "Kettlebell Chaos Swing",
+            "Snatch and Pray",
+            "Lunge of Doom",
+            "Squatpocalypse",
+            "Push-Up Thunderstorm",
+            "Deadlift Avalanche",
+            "Pistol Squat Inferno",
+            "Box Jump Bonanza",
+            "Wall Ball Mayhem",
+            "Overhead Mayhem Slam",
+            "Barbell Lightning Lift",
+            "Jumping Jack Tsunami",
+            "Dumbbell Disaster Dash",
+            "Thruster Tornado",
+            "Plank of Fury",
+            "Sledgehammer Cyclone",
+            "Mountain Climber Chaos",
+            "Rope Whip Whirlwind",
+            "Bear Crawl Carnage",
+            "Picture-perfect Finish Posers"
+        ];
+
+        function generateExercise() {
+            const randomIndex = Math.floor(Math.random() * exerciseNames.length);
+            const exerciseName = exerciseNames[randomIndex];
+
+            // Update URL with the exercise name as a query string
+            const encodedName = encodeURIComponent(exerciseName);
+            const newUrl = `${window.location.origin}${window.location.pathname}?exercise=${encodedName}`;
+            window.history.pushState({}, "", newUrl);
+
+            // Update exercise display
+            const exerciseDisplay = document.getElementById("exercise-display");
+            const exerciseImage = document.getElementById("exercise-image");
+
+            exerciseDisplay.textContent = exerciseName;
+            exerciseImage.src = `images/${exerciseName}.webp`;
+        }
+
+        function getExerciseFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get("exercise");
+        }
+
+        window.onload = () => {
+            const initialExercise = getExerciseFromUrl();
+            const exerciseDisplay = document.getElementById("exercise-display");
+            const exerciseImage = document.getElementById("exercise-image");
+
+            if (initialExercise) {
+                exerciseDisplay.textContent = decodeURIComponent(initialExercise);
+                exerciseImage.src = `images/${decodeURIComponent(initialExercise).replace(/ /g, '_')}.jpg`;
+            } else {
+                generateExercise();
+            }
+        };
+
+        function shareExercise() {
+            const currentUrl = window.location.href;
+            navigator.clipboard.writeText(currentUrl).then(() => {
+                alert("Exercise URL copied to clipboard!");
+            }).catch(err => {
+                alert("Failed to copy URL: " + err);
+            });
+        }
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        h1 {
+            margin: 20px 0;
+        }
+
+        #exercise-display {
+            font-size: 1.5em;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        #exercise-image {
+            width: 300px;
+            height: auto;
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #share-button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Crossfit Exercise Generator</h1>
+    <div id="exercise-display">Loading...</div>
+    <img id="exercise-image" src="" alt="Exercise" />
+    <br />
+    <button onclick="generateExercise()">Generate Exercise</button>
+    <button id="share-button" onclick="shareExercise()">Share Exercise</button>
+</body>
+</html>
