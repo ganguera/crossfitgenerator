@@ -11,7 +11,7 @@ for FILE in "$DIR"/*; do
     DIRNAME=$(dirname "$FILE")
     BASENAME=$(basename "$FILE")
     # Convert to lowercase and replace spaces with hyphens
-    NEWNAME=$(echo "$BASENAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+    NEWNAME=$(echo "$BASENAME" | tr '[:upper:]' '[:lower:]' | tr '-' '_')
     # Rename the file if the new name is different
     if [ "$BASENAME" != "$NEWNAME" ]; then
       mv "$FILE" "$DIRNAME/$NEWNAME"
