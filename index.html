@@ -50,8 +50,14 @@
         function getMovementFromQuery() {
             const urlParams = new URLSearchParams(window.location.search);
             const movementQuery = urlParams.get("m");
+            if (!movementQuery) return null;
 
-            return movements.includes(movementQuery) ? movementQuery : null;
+            // Replace hyphens with spaces and capitalize each word
+            const formattedQuery = movementQuery
+                .split("-")
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ");
+            return movements.includes(formattedQuery) ? formattedQuery : null;
         }
 
         window.onload = () => {
