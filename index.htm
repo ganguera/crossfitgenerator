@@ -34,9 +34,9 @@
             const randomIndex = Math.floor(Math.random() * exerciseNames.length);
             const exerciseName = exerciseNames[randomIndex];
 
-            // Update URL with the exercise name as a query string
-            const encodedName = encodeURIComponent(exerciseName);
-            const newUrl = `${window.location.origin}${window.location.pathname}?exercise=${encodedName}`;
+            // Update URL with the exercise name in the path
+            const formattedName = encodeURIComponent(exerciseName);
+            const newUrl = `${window.location.origin}/${formattedName}`;
             window.history.pushState({}, "", newUrl);
 
             // Update exercise display
@@ -48,8 +48,8 @@
         }
 
         function getExerciseFromUrl() {
-            const params = new URLSearchParams(window.location.search);
-            return params.get("exercise");
+            const path = decodeURIComponent(window.location.pathname.slice(1));
+            return exerciseNames.includes(path) ? path : null;
         }
 
         window.onload = () => {
@@ -58,8 +58,8 @@
             const exerciseImage = document.getElementById("exercise-image");
 
             if (initialExercise) {
-                exerciseDisplay.textContent = decodeURIComponent(initialExercise);
-                exerciseImage.src = `images/${decodeURIComponent(initialExercise)}.webp`;
+                exerciseDisplay.textContent = initialExercise;
+                exerciseImage.src = `images/${initialExercise}.webp`;
             } else {
                 generateExercise();
             }
