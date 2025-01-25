@@ -7,57 +7,48 @@
     <script>
         // Pre-generated funny Crossfit movements
         const movements = [
-            "Burpee Twister Explosion",
-            "Kettlebell Chaos Swing",
-            "Snatch and Pray",
-            "Lunge of Doom",
-            "Squatpocalypse",
-            "Push-Up Thunderstorm",
-            "Deadlift Avalanche",
-            "Pistol Squat Inferno",
-            "Box Jump Bonanza",
-            "Wall Ball Mayhem",
-            "Overhead Mayhem Slam",
-            "Barbell Lightning Lift",
-            "Jumping Jack Tsunami",
-            "Dumbbell Disaster Dash",
-            "Thruster Tornado",
-            "Plank of Fury",
-            "Sledgehammer Cyclone",
-            "Mountain Climber Chaos",
-            "Rope Whip Whirlwind",
-            "Bear Crawl Carnage",
-            "Picture-perfect Finish Posers"
+            "burpee_twister_explosion",
+            "kettlebell_chaos_swing",
+            "snatch_and_pray",
+            "lunge_of_doom",
+            "squatpocalypse",
+            "push-up_thunderstorm",
+            "deadlift_avalanche",
+            "pistol_squat_inferno",
+            "box_jump_bonanza",
+            "wall_ball_mayhem",
+            "overhead_mayhem_slam",
+            "barbell_lightning_lift",
+            "jumping_jack_tsunami",
+            "dumbbell_disaster_dash",
+            "thruster_tornado",
+            "plank_of_fury",
+            "sledgehammer_cyclone",
+            "mountain_climber_chaos",
+            "rope_whip_whirlwind",
+            "bear_crawl_carnage",
+            "picture-perfect_finish_posers"
         ];
 
         function generateMovement() {
             const randomIndex = Math.floor(Math.random() * movements.length);
             const movementName = movements[randomIndex];
 
-            // Replace spaces with hyphens for the query parameter value
-            const formattedName = movementName.toLowerCase().replace(/\s+/g, "-");
-            const newUrl = `${window.location.origin}?m=${formattedName}`;
+            const newUrl = `${window.location.origin}?m=${movementName}`;
             window.history.pushState({}, "", newUrl);
 
-            // Update movement display
             const movementDisplay = document.getElementById("movement-display");
             const movementImage = document.getElementById("movement-image");
 
             movementDisplay.textContent = movementName;
-            movementImage.src = `images/${formattedName}.webp`;
+            movementImage.src = `images/${movementName}.webp`;
         }
 
         function getMovementFromQuery() {
             const urlParams = new URLSearchParams(window.location.search);
             const movementQuery = urlParams.get("m");
-            if (!movementQuery) return null;
-
-            // Replace hyphens with spaces and capitalize each word
-            const formattedQuery = movementQuery
-                .split("-")
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(" ");
-            return movements.includes(formattedQuery) ? formattedQuery : null;
+            
+            return movements.includes(movementQuery) ? movementQuery : null;
         }
 
         window.onload = () => {
@@ -66,9 +57,12 @@
             const movementImage = document.getElementById("movement-image");
 
             if (initialMovement) {
-                movementDisplay.textContent = initialMovement;
-                const formattedName = initialMovement.toLowerCase().replace(/\s+/g, "-");
-                movementImage.src = `images/${formattedName}.webp`;
+                const formattedMovement = initialMovement
+                    .split("_")
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(" ");
+                movementDisplay.textContent = formattedMovement;
+                movementImage.src = `images/${initialMovement}.webp`;
             } else {
                 generateMovement();
             }
