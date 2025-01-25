@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crossfit Exercise Generator</title>
+    <title>Cross Training Movement Generator</title>
     <script>
-        // Pre-generated funny Crossfit exercise names
-        const exerciseNames = [
+        // Pre-generated funny Cross Training movement names
+        const movements = [
             "Burpee Twister Explosion",
             "Kettlebell Chaos Swing",
             "Snatch and Pray",
@@ -30,50 +30,55 @@
             "Picture-perfect Finish Posers"
         ];
 
-        function generateExercise() {
-            const randomIndex = Math.floor(Math.random() * exerciseNames.length);
-            const exerciseName = exerciseNames[randomIndex];
+        function generateMovement() {
+            const randomIndex = Math.floor(Math.random() * movements.length);
+            const movementName = movements[randomIndex];
 
-            // Replace spaces with hyphens for the URL
-            const formattedName = exerciseName.toLowerCase().replace(/\s+/g, "-");
-            const newUrl = `${window.location.origin}/${formattedName}`;
+            // Replace spaces with hyphens for the query parameter value
+            const formattedName = movementName.toLowerCase().replace(/\s+/g, "-");
+            const newUrl = `${window.location.origin}?m=${formattedName}`;
             window.history.pushState({}, "", newUrl);
 
-            // Update exercise display
-            const exerciseDisplay = document.getElementById("exercise-display");
-            const exerciseImage = document.getElementById("exercise-image");
+            // Update movement display
+            const movementDisplay = document.getElementById("movement-display");
+            const movementImage = document.getElementById("movement-image");
 
-            exerciseDisplay.textContent = exerciseName;
-            exerciseImage.src = `images/${formattedName}.webp`;
+            movementDisplay.textContent = movementName;
+            movementImage.src = `images/${formattedName}.webp`;
         }
 
-        function getExerciseFromUrl() {
-            const path = window.location.pathname.slice(1).replace(/-/g, " ");
-            const formattedPath = path
-                .split(" ")
+        function getMovementFromQuery() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const movementQuery = urlParams.get("m");
+            if (!movementQuery) return null;
+
+            // Replace hyphens with spaces and capitalize each word
+            const formattedQuery = movementQuery
+                .split("-")
                 .map(word => word.charAt(0).toUpperCase() + word.slice(1))
                 .join(" ");
-            return exerciseNames.includes(formattedPath) ? formattedPath : null;
+
+            return movements.includes(formattedQuery) ? formattedQuery : null;
         }
 
         window.onload = () => {
-            const initialExercise = getExerciseFromUrl();
-            const exerciseDisplay = document.getElementById("exercise-display");
-            const exerciseImage = document.getElementById("exercise-image");
+            const initialMovement = getMovementFromQuery();
+            const movementDisplay = document.getElementById("movement-display");
+            const movementImage = document.getElementById("movement-image");
 
-            if (initialExercise) {
-                exerciseDisplay.textContent = initialExercise;
-                const formattedName = initialExercise.toLowerCase().replace(/\s+/g, "-");
-                exerciseImage.src = `images/${formattedName}.webp`;
+            if (initialMovement) {
+                movementDisplay.textContent = initialMovement;
+                const formattedName = initialMovement.toLowerCase().replace(/\s+/g, "-");
+                movementImage.src = `images/${formattedName}.webp`;
             } else {
-                generateExercise();
+                generateMovement();
             }
         };
 
-        function shareExercise() {
+        function shareMovement() {
             const currentUrl = window.location.href;
             navigator.clipboard.writeText(currentUrl).then(() => {
-                alert("Exercise URL copied to clipboard!");
+                alert("Movement URL copied to clipboard!");
             }).catch(err => {
                 alert("Failed to copy URL: " + err);
             });
@@ -92,13 +97,13 @@
             margin: 20px 0;
         }
 
-        #exercise-display {
+        #movement-display {
             font-size: 1.5em;
             margin: 20px 0;
             font-weight: bold;
         }
 
-        #exercise-image {
+        #movement-image {
             width: 300px;
             height: auto;
             margin: 20px 0;
@@ -124,11 +129,11 @@
     </style>
 </head>
 <body>
-    <h1>Crossfit Exercise Generator</h1>
-    <div id="exercise-display">Loading...</div>
-    <img id="exercise-image" src="" alt="Exercise" />
+    <h1>Cross Training Movement Generator</h1>
+    <div id="movement-display">Loading...</div>
+    <img id="movement-image" src="" alt="Movement" />
     <br />
-    <button onclick="generateExercise()">Generate Exercise</button>
-    <button id="share-button" onclick="shareExercise()">Share Exercise</button>
+    <button onclick="generateMovement()">Generate Movement</button>
+    <button id="share-button" onclick="shareMovement()">Share Movement</button>
 </body>
 </html>
