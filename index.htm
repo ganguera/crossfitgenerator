@@ -34,8 +34,8 @@
             const randomIndex = Math.floor(Math.random() * exerciseNames.length);
             const exerciseName = exerciseNames[randomIndex];
 
-            // Update URL with the exercise name in the path
-            const formattedName = encodeURIComponent(exerciseName);
+            // Replace spaces with hyphens for the URL
+            const formattedName = exerciseName.toLowerCase().replace(/\s+/g, "-");
             const newUrl = `${window.location.origin}/${formattedName}`;
             window.history.pushState({}, "", newUrl);
 
@@ -44,12 +44,16 @@
             const exerciseImage = document.getElementById("exercise-image");
 
             exerciseDisplay.textContent = exerciseName;
-            exerciseImage.src = `images/${exerciseName}.webp`;
+            exerciseImage.src = `images/${formattedName}.webp`;
         }
 
         function getExerciseFromUrl() {
-            const path = decodeURIComponent(window.location.pathname.slice(1));
-            return exerciseNames.includes(path) ? path : null;
+            const path = window.location.pathname.slice(1).replace(/-/g, " ");
+            const formattedPath = path
+                .split(" ")
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ");
+            return exerciseNames.includes(formattedPath) ? formattedPath : null;
         }
 
         window.onload = () => {
@@ -59,7 +63,8 @@
 
             if (initialExercise) {
                 exerciseDisplay.textContent = initialExercise;
-                exerciseImage.src = `images/${initialExercise}.webp`;
+                const formattedName = initialExercise.toLowerCase().replace(/\s+/g, "-");
+                exerciseImage.src = `images/${formattedName}.webp`;
             } else {
                 generateExercise();
             }
