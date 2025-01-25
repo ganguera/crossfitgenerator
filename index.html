@@ -29,34 +29,52 @@
             "Bear Crawl Carnage",
             "Picture-perfect Finish Posers"
         ];
+
         function generateMovement() {
             const randomIndex = Math.floor(Math.random() * movements.length);
             const movementName = movements[randomIndex];
-            // Update URL with the movement name as a query string
-            const encodedName = encodeURIComponent(movementName);
-            const newUrl = `${window.location.origin}${window.location.pathname}?m=${encodedName}`;
+
+            // Replace spaces with hyphens for the query parameter value
+            const formattedName = movementName.toLowerCase().replace(/\s+/g, "-");
+            const newUrl = `${window.location.origin}?movement=${formattedName}`;
             window.history.pushState({}, "", newUrl);
+
             // Update movement display
             const movementDisplay = document.getElementById("movement-display");
             const movementImage = document.getElementById("movement-image");
+
             movementDisplay.textContent = movementName;
-            movementImage.src = `images/${movementName}.webp`;
+            movementImage.src = `images/${formattedName}.webp`;
         }
-        function getMovementFromUrl() {
-            const params = new URLSearchParams(window.location.search);
-            return params.get("m");
+
+        function getMovementFromQuery() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const movementQuery = urlParams.get("movement");
+            if (!movementQuery) return null;
+
+            // Replace hyphens with spaces and capitalize each word
+            const formattedQuery = movementQuery
+                .split("-")
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ");
+
+            return movements.includes(formattedQuery) ? formattedQuery : null;
         }
+
         window.onload = () => {
-            const initialMovement = getMovementFromUrl();
+            const initialMovement = getMovementFromQuery();
             const movementDisplay = document.getElementById("movement-display");
             const movementImage = document.getElementById("movement-image");
+
             if (initialMovement) {
-                movementDisplay.textContent = decodeURIComponent(initialMovement);
-                movementImage.src = `images/${decodeURIComponent(initialMovement).replace(/ /g, '_')}.jpg`;
+                movementDisplay.textContent = initialMovement;
+                const formattedName = initialMovement.toLowerCase().replace(/\s+/g, "-");
+                movementImage.src = `images/${formattedName}.webp`;
             } else {
                 generateMovement();
             }
         };
+
         function shareMovement() {
             const currentUrl = window.location.href;
             navigator.clipboard.writeText(currentUrl).then(() => {
@@ -74,19 +92,23 @@
             padding: 0;
             background-color: #f4f4f9;
         }
+
         h1 {
             margin: 20px 0;
         }
+
         #movement-display {
             font-size: 1.5em;
             margin: 20px 0;
             font-weight: bold;
         }
+
         #movement-image {
             width: 300px;
             height: auto;
             margin: 20px 0;
         }
+
         button {
             padding: 10px 20px;
             font-size: 1em;
@@ -96,9 +118,11 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #0056b3;
         }
+
         #share-button {
             margin-top: 10px;
         }
