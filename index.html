@@ -65,7 +65,7 @@
             const urlParams = new URLSearchParams(window.location.search);
             const movementQuery = urlParams.get("m");
             
-            return movements.includes(movementQuery) ? movementQuery : "trainees_not_found";
+            return movements.includes(movementQuery) ? movementQuery : null;
         }
 
         window.onload = () => {
