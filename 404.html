@@ -1,26 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting...</title>
-    <script>
-        // Extract the pathname from the URL
-        const currentPath = window.location.pathname;
-
-        // Redirect to the root with the same path appended
-        const redirectUrl = `${window.location.origin}${currentPath}`;
-
-        // Redirect to the new URL
-        window.location.href = redirectUrl;
-    </script>
-</head>
-<body>
-    <h1>Redirecting...</h1>
-    <p>If you are not redirected automatically, <a id="redirect-link" href="#">click here</a>.</p>
-    <script>
-        // Update the link for manual redirection
-        document.getElementById("redirect-link").href = redirectUrl;
-    </script>
-</body>
-</html>
+<script>
+    window.location.href = '/';
+</script>
